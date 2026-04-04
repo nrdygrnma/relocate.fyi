@@ -1,0 +1,53 @@
+{
+  "name": "relocate-fyi",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "typecheck": "nuxt typecheck",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:unit": "vitest --project unit",
+    "test:nuxt": "vitest --project nuxt",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@iconify-json/lucide": "^1.2.100",
+    "@iconify-json/simple-icons": "^1.2.75",
+    "@libsql/client": "0.14.0",
+    "@nuxt/test-utils": "4.0.0",
+    "@nuxt/ui": "^4.6.0",
+    "@pinia/nuxt": "0.11.3",
+    "@prisma/adapter-libsql": "^7.6.0",
+    "@prisma/client": "^7.6.0",
+    "nuxt": "^4.4.2",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@iconify-json/heroicons": "^1.2.3",
+    "@nuxt/eslint": "^1.15.2",
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.5.2",
+    "@vitest/coverage-v8": "^4.1.2",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^10.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "playwright-core": "^1.59.1",
+    "prettier": "^3.8.1",
+    "prisma": "^7.6.0",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2",
+    "vue-tsc": "^3.2.6"
+  },
+  "packageManager": "pnpm@10.33.0"
+}

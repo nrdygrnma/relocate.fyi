@@ -1,0 +1,215 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Country {
+  id                    String   @id @default(uuid())
+  name                  String   @unique
+  isoCode               String   @unique
+  region                String
+  currencyCode          String?
+  languagePrimary       String?
+  hasDestinationProfile Boolean  @default(false)
+  hasOriginProfile      Boolean  @default(false)
+  published             Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  destinationProfile DestinationProfile?
+  originProfile      OriginProfile?
+}
+
+model DestinationProfile {
+  id        String  @id @default(uuid())
+  countryId String  @unique
+  slug      String  @unique
+  summary   String?
+
+  taxBasis            String?
+  taxRemittanceDetail String?
+  incomeTaxRateMin    Int?
+  incomeTaxRateMax    Int?
+  capitalGainsTax     Boolean   @default(false)
+  capitalGainsDetail  String?
+  wealthTax           Boolean   @default(false)
+  dtaCountries        String?
+  tieaCountries       String?
+  taxNotes            String?
+  taxVerifiedAt       DateTime?
+  taxSourceUrl        String?
+
+  neobankAccepted          String?
+  neobankDetail            String?
+  accountBeforeArrival     Boolean   @default(false)
+  permitRequiredForBanking Boolean   @default(false)
+  minDepositRequired       Boolean   @default(false)
+  minDepositAmountUsd      Int?
+  recommendedBanks         String?
+  bankingNotes             String?
+  bankingVerifiedAt        DateTime?
+  bankingSourceUrl         String?
+
+  publicHealthcareAccess   String?
+  publicHealthcareDetail   String?
+  privateInsuranceRequired Boolean   @default(false)
+  avgPrivateInsuranceUsdPa Int?
+  healthcareQualityNotes   String?
+  healthcareVerifiedAt     DateTime?
+  healthcareSourceUrl      String?
+
+  costTier               String?
+  monthlyBudgetSingleUsd Int?
+  monthlyBudgetCoupleUsd Int?
+  rent1bedCityUsd        Int?
+  rent1bedOutsideUsd     Int?
+  costNotes              String?
+  costVerifiedAt         DateTime?
+  costSourceUrl          String?
+
+  policeClearanceRequired Boolean   @default(false)
+  apostilleRequired       Boolean   @default(false)
+  translationRequired     Boolean   @default(false)
+  translationLanguages    String?
+  inPersonRequired        Boolean   @default(false)
+  inPersonDetail          String?
+  frictionNotes           String?
+  frictionVerifiedAt      DateTime?
+  frictionSourceUrl       String?
+
+  lastEditorialReview DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  country  Country   @relation(fields: [countryId], references: [id])
+  pathways Pathway[]
+}
+
+model OriginProfile {
+  id        String  @id @default(uuid())
+  countryId String  @unique
+  slug      String  @unique
+  summary   String?
+
+  taxResidencyRule           String?
+  exitTaxExists              Boolean   @default(false)
+  exitTaxDetail              String?
+  daysToBreakResidency       Int?
+  zweitwohnsitzRule          Boolean   @default(false)
+  zweitwohnsitzDetail        String?
+  unlimitedLiabilityTriggers String?
+  taxExitNotes               String?
+  taxExitVerifiedAt          DateTime?
+  taxExitSourceUrl           String?
+
+  deregisterResidence  String?
+  deregisterBusiness   String?
+  timingRecommendation String?
+  deregVerifiedAt      DateTime?
+  deregSourceUrl       String?
+
+  bankAccountPostExit   String?
+  bankAccountDetail     String?
+  pensionPortability    String?
+  abfertigungRules      String?
+  socialInsuranceDetail String?
+  financialVerifiedAt   DateTime?
+  financialSourceUrl    String?
+
+  policeClearanceIssuer         String?
+  policeClearanceWeeks          Int?
+  policeClearanceValidityMonths Int?
+  policeClearanceUrl            String?
+  otherExitDocuments            String?
+  documentsVerifiedAt           DateTime?
+  documentsSourceUrl            String?
+
+  lastEditorialReview DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  country Country @relation(fields: [countryId], references: [id])
+}
+
+model Pathway {
+  id                   String  @id @default(uuid())
+  destinationProfileId String
+  name                 String
+  slug                 String  @unique
+  officialName         String?
+  summary              String?
+  pathwayType          String
+  published            Boolean @default(false)
+
+  durationYears            Int?
+  renewable                Boolean @default(false)
+  renewalDetail            String?
+  leadsToPr                Boolean @default(false)
+  prTimelineYears          Int?
+  dependentsAllowed        Boolean @default(false)
+  dependentTypes           String?
+  workAllowed              String  @default("no")
+  stayRequirementDaysPA    Int?
+  propertyPurchaseRequired Boolean @default(false)
+  propertyMinValueUsd      Int?
+
+  applicationStages  String?
+  processingWeeksMin Int?
+  processingWeeksMax Int?
+  inPersonRequired   Boolean @default(false)
+  governmentFeeUsd   Int?
+  processNotes       String?
+
+  lastVerifiedAt DateTime?
+  sourceUrl      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  destinationProfile DestinationProfile @relation(fields: [destinationProfileId], references: [id])
+  steps              Step[]
+  eligibilityRules   EligibilityRule[]
+}
+
+model Step {
+  id                  String   @id @default(uuid())
+  pathwayId           String
+  orderIndex          Int
+  title               String
+  description         String?
+  category            String
+  typicalDurationDays Int?
+  validityDays        Int?
+  dependsOn           String?
+  mustCompleteBefore  String?
+  officialUrl         String?
+  costUsd             Int?
+  originSide          Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  pathway Pathway @relation(fields: [pathwayId], references: [id])
+
+  @@unique([pathwayId, orderIndex])
+}
+
+model EligibilityRule {
+  id                    String   @id @default(uuid())
+  pathwayId             String
+  ruleType              String
+  operator              String
+  valueInt              Int?
+  valueString           String?
+  valueList             String?
+  perDependent          Boolean  @default(false)
+  dependentIncrementUsd Int?
+  hardRequirement       Boolean  @default(true)
+  displayLabel          String
+  notes                 String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  pathway Pathway @relation(fields: [pathwayId], references: [id])
+}
