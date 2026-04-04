@@ -6,7 +6,7 @@
 
     <UAlert v-else-if="store.error" :description="store.error" color="error" />
 
-    <div v-else-if="profile" class="space-y-6">
+    <div v-else-if="profile" class="space-y-6 max-w-4xl mx-auto">
       <div class="mb-8">
         <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
           <NuxtLink class="hover:text-gray-600" to="/">Countries</NuxtLink>

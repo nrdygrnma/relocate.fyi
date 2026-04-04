@@ -1,5 +1,7 @@
-<script setup lang="ts"></script>
+<template>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <slot />
+  </div>
+</template>
 
-<template></template>
-
-<style scoped></style>
+<script lang="ts" setup></script>
