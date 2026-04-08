@@ -37,7 +37,7 @@
 import type { DestinationProfile } from '~/types'
 
 const form = defineModel<Partial<DestinationProfile>>({ required: true })
-const costTierOptions = ['low', 'medium', 'high', 'very_high']
+const costTierOptions = ['Low', 'Moderate', 'High', 'Very High']
 
 const costTier = useNullableString(form, 'costTier')
 const monthlyBudgetSingleUsd = useNullableNumber(form, 'monthlyBudgetSingleUsd')

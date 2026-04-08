@@ -1,6 +1,205 @@
-import prisma from '../server/db/client'
+import { PrismaClient } from '@prisma/client'
+import { PrismaLibSql } from '@prisma/adapter-libsql'
+
+const adapter = new PrismaLibSql({
+  url: 'file:./dev.db'
+})
+
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
+  // Seed Languages
+  const languages = [
+    { name: 'English', code: 'en' },
+    { name: 'German', code: 'de' },
+    { name: 'French', code: 'fr' },
+    { name: 'Spanish', code: 'es' },
+    { name: 'Portuguese', code: 'pt' },
+    { name: 'Italian', code: 'it' },
+    { name: 'Dutch', code: 'nl' },
+    { name: 'Chinese', code: 'zh' },
+    { name: 'Japanese', code: 'ja' },
+    { name: 'Russian', code: 'ru' },
+    { name: 'Thai', code: 'th' },
+    { name: 'Arabic', code: 'ar' },
+    { name: 'Malay', code: 'ms' },
+    { name: 'Vietnamese', code: 'vi' },
+    { name: 'Indonesian', code: 'id' },
+    { name: 'Korean', code: 'ko' },
+    { name: 'Hindi', code: 'hi' },
+    { name: 'Turkish', code: 'tr' },
+    { name: 'Filipino', code: 'tl' },
+    { name: 'Greek', code: 'el' },
+    { name: 'Croatian', code: 'hr' }
+  ]
+  for (const lang of languages) {
+    await prisma.language.upsert({
+      where: { code: lang.code },
+      update: { name: lang.name },
+      create: lang
+    })
+  }
+
+  // Seed Currencies
+  const currencies = [
+    { name: 'US Dollar', code: 'USD' },
+    { name: 'Euro', code: 'EUR' },
+    { name: 'British Pound', code: 'GBP' },
+    { name: 'Swiss Franc', code: 'CHF' },
+    { name: 'Japanese Yen', code: 'JPY' },
+    { name: 'Australian Dollar', code: 'AUD' },
+    { name: 'Canadian Dollar', code: 'CAD' },
+    { name: 'Mauritian Rupee', code: 'MUR' },
+    { name: 'Thai Baht', code: 'THB' },
+    { name: 'Mexican Peso', code: 'MXN' },
+    { name: 'UAE Dirham', code: 'AED' },
+    { name: 'Singapore Dollar', code: 'SGD' },
+    { name: 'Colombian Peso', code: 'COP' },
+    { name: 'Panamanian Balboa', code: 'PAB' },
+    { name: 'Vietnamese Dong', code: 'VND' },
+    { name: 'Malaysian Ringgit', code: 'MYR' },
+    { name: 'Indonesian Rupiah', code: 'IDR' },
+    { name: 'Brazilian Real', code: 'BRL' },
+    { name: 'Indian Rupee', code: 'INR' },
+    { name: 'South African Rand', code: 'ZAR' },
+    { name: 'Turkish Lira', code: 'TRY' },
+    { name: 'Philippine Peso', code: 'PHP' },
+    { name: 'New Zealand Dollar', code: 'NZD' },
+    { name: 'Costa Rican Colon', code: 'CRC' },
+    { name: 'Chinese Yuan', code: 'CNY' },
+    { name: 'South Korean Won', code: 'KRW' }
+  ]
+  for (const curr of currencies) {
+    await prisma.currency.upsert({
+      where: { code: curr.code },
+      update: { name: curr.name },
+      create: curr
+    })
+  }
+
+  // Seed Country References
+  const countriesRef = [
+    { name: 'Austria', isoCode: 'AT', currencyCode: 'EUR', languageCode: 'de', region: 'europe' },
+    { name: 'Mauritius', isoCode: 'MU', currencyCode: 'MUR', languageCode: 'en', region: 'africa' },
+    { name: 'Portugal', isoCode: 'PT', currencyCode: 'EUR', languageCode: 'pt', region: 'europe' },
+    { name: 'Spain', isoCode: 'ES', currencyCode: 'EUR', languageCode: 'es', region: 'europe' },
+    { name: 'Germany', isoCode: 'DE', currencyCode: 'EUR', languageCode: 'de', region: 'europe' },
+    {
+      name: 'United States',
+      isoCode: 'US',
+      currencyCode: 'USD',
+      languageCode: 'en',
+      region: 'americas'
+    },
+    {
+      name: 'United Kingdom',
+      isoCode: 'GB',
+      currencyCode: 'GBP',
+      languageCode: 'en',
+      region: 'europe'
+    },
+    { name: 'France', isoCode: 'FR', currencyCode: 'EUR', languageCode: 'fr', region: 'europe' },
+    { name: 'Italy', isoCode: 'IT', currencyCode: 'EUR', languageCode: 'it', region: 'europe' },
+    {
+      name: 'Switzerland',
+      isoCode: 'CH',
+      currencyCode: 'CHF',
+      languageCode: 'de',
+      region: 'europe'
+    },
+    { name: 'Panama', isoCode: 'PA', currencyCode: 'PAB', languageCode: 'es', region: 'americas' },
+    {
+      name: 'Colombia',
+      isoCode: 'CO',
+      currencyCode: 'COP',
+      languageCode: 'es',
+      region: 'americas'
+    },
+    { name: 'Mexico', isoCode: 'MX', currencyCode: 'MXN', languageCode: 'es', region: 'americas' },
+    { name: 'Thailand', isoCode: 'TH', currencyCode: 'THB', languageCode: 'th', region: 'asia' },
+    { name: 'Vietnam', isoCode: 'VN', currencyCode: 'VND', languageCode: 'vi', region: 'asia' },
+    { name: 'China', isoCode: 'CN', currencyCode: 'CNY', languageCode: 'zh', region: 'asia' }, // CNY not in list, let's add or use USD? Added CNY below.
+    {
+      name: 'United Arab Emirates',
+      isoCode: 'AE',
+      currencyCode: 'AED',
+      languageCode: 'ar',
+      region: 'middle_east'
+    },
+    { name: 'Indonesia', isoCode: 'ID', currencyCode: 'IDR', languageCode: 'id', region: 'asia' },
+    { name: 'Malaysia', isoCode: 'MY', currencyCode: 'MYR', languageCode: 'ms', region: 'asia' },
+    { name: 'Singapore', isoCode: 'SG', currencyCode: 'SGD', languageCode: 'en', region: 'asia' },
+    {
+      name: 'Costa Rica',
+      isoCode: 'CR',
+      currencyCode: 'CRC',
+      languageCode: 'es',
+      region: 'americas'
+    },
+    { name: 'Philippines', isoCode: 'PH', currencyCode: 'PHP', languageCode: 'tl', region: 'asia' },
+    { name: 'Brazil', isoCode: 'BR', currencyCode: 'BRL', languageCode: 'pt', region: 'americas' },
+    { name: 'India', isoCode: 'IN', currencyCode: 'INR', languageCode: 'hi', region: 'asia' },
+    {
+      name: 'South Africa',
+      isoCode: 'ZA',
+      currencyCode: 'ZAR',
+      languageCode: 'en',
+      region: 'africa'
+    },
+    { name: 'Turkey', isoCode: 'TR', currencyCode: 'TRY', languageCode: 'tr', region: 'europe' },
+    { name: 'Japan', isoCode: 'JP', currencyCode: 'JPY', languageCode: 'ja', region: 'asia' },
+    { name: 'South Korea', isoCode: 'KR', currencyCode: 'KRW', languageCode: 'ko', region: 'asia' },
+    {
+      name: 'Australia',
+      isoCode: 'AU',
+      currencyCode: 'AUD',
+      languageCode: 'en',
+      region: 'oceania'
+    },
+    {
+      name: 'New Zealand',
+      isoCode: 'NZ',
+      currencyCode: 'NZD',
+      languageCode: 'en',
+      region: 'oceania'
+    },
+    { name: 'Canada', isoCode: 'CA', currencyCode: 'CAD', languageCode: 'en', region: 'americas' },
+    {
+      name: 'Netherlands',
+      isoCode: 'NL',
+      currencyCode: 'EUR',
+      languageCode: 'nl',
+      region: 'europe'
+    },
+    { name: 'Ireland', isoCode: 'IE', currencyCode: 'EUR', languageCode: 'en', region: 'europe' },
+    { name: 'Greece', isoCode: 'GR', currencyCode: 'EUR', languageCode: 'el', region: 'europe' },
+    { name: 'Croatia', isoCode: 'HR', currencyCode: 'EUR', languageCode: 'hr', region: 'europe' },
+    { name: 'Malta', isoCode: 'MT', currencyCode: 'EUR', languageCode: 'en', region: 'europe' },
+    { name: 'Cyprus', isoCode: 'CY', currencyCode: 'EUR', languageCode: 'el', region: 'europe' }
+  ]
+
+  for (const c of countriesRef) {
+    const currency = await prisma.currency.findUnique({ where: { code: c.currencyCode } })
+    const language = await prisma.language.findUnique({ where: { code: c.languageCode } })
+
+    await prisma.countryReference.upsert({
+      where: { isoCode: c.isoCode },
+      update: {
+        name: c.name,
+        region: c.region,
+        currencyId: currency?.id,
+        languagePrimaryId: language?.id
+      },
+      create: {
+        name: c.name,
+        isoCode: c.isoCode,
+        region: c.region,
+        currencyId: currency?.id,
+        languagePrimaryId: language?.id
+      }
+    })
+  }
+
   // Austria — origin country
   const austria = await prisma.country.upsert({
     where: { isoCode: 'AT' },
@@ -278,6 +477,7 @@ async function main() {
   })
 
   // Steps
+  await prisma.step.deleteMany({}) // Clean up steps first as createMany might fail on repeat
   await prisma.step.createMany({
     data: [
       {

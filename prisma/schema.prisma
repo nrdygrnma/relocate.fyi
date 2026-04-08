@@ -23,6 +23,35 @@ model Country {
   originProfile      OriginProfile?
 }
 
+model Language {
+  id   String @id @default(uuid())
+  name String @unique
+  code String @unique
+
+  countries CountryReference[]
+}
+
+model Currency {
+  id   String @id @default(uuid())
+  name String @unique
+  code String @unique
+
+  countries CountryReference[]
+}
+
+model CountryReference {
+  id      String  @id @default(uuid())
+  name    String  @unique
+  isoCode String  @unique
+  region  String?
+
+  currencyId        String?
+  languagePrimaryId String?
+
+  currency        Currency? @relation(fields: [currencyId], references: [id])
+  languagePrimary Language? @relation(fields: [languagePrimaryId], references: [id])
+}
+
 model DestinationProfile {
   id        String  @id @default(uuid())
   countryId String  @unique
@@ -160,7 +189,9 @@ model Pathway {
   processingWeeksMin Int?
   processingWeeksMax Int?
   inPersonRequired   Boolean @default(false)
+  governmentFee      Int?
   governmentFeeUsd   Int?
+  currencyCode       String? @default("USD")
   processNotes       String?
 
   lastVerifiedAt DateTime?
@@ -185,7 +216,9 @@ model Step {
   dependsOn           String?
   mustCompleteBefore  String?
   officialUrl         String?
+  cost                Int?
   costUsd             Int?
+  currencyCode        String?  @default("USD")
   originSide          Boolean  @default(false)
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt

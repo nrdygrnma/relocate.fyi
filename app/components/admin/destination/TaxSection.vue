@@ -38,7 +38,7 @@
 import type { DestinationProfile } from '~/types'
 
 const form = defineModel<Partial<DestinationProfile>>({ required: true })
-const taxBasisOptions = ['territorial', 'remittance', 'worldwide']
+const taxBasisOptions = ['Territorial', 'Worldwide', 'Remittance-based']
 
 const taxBasis = useNullableString(form, 'taxBasis')
 const incomeTaxRateMin = useNullableNumber(form, 'incomeTaxRateMin')

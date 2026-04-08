@@ -17,6 +17,7 @@ logs
 .DS_Store
 .fleet
 .idea
+.junie
 
 # Local env files
 .env
@@ -29,5 +30,6 @@ coverage/
 # Playwright
 playwright-report/
 test-results/
+allure-results
 
 /app/generated/prisma

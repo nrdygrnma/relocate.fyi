@@ -1,0 +1,180 @@
+- generic:
+    - generic:
+        - generic:
+            - banner:
+                - generic:
+                    - generic:
+                        - link:
+                            - /url: /
+                            - text: relocate.fyi
+                        - navigation:
+                            - link:
+                                - /url: /
+                                - text: Countries
+                            - link:
+                                - /url: /pathway-finder
+                                - text: Pathway finder
+                            - link:
+                                - /url: /pathway-finder
+                                - text: Get started
+                            - separator
+                            - link:
+                                - /url: /admin
+                                - text: Admin
+            - main:
+                - generic:
+                    - generic:
+                        - generic:
+                            - generic:
+                                - link:
+                                    - /url: /admin
+                                    - text: Admin
+                                - generic: Countries
+                            - heading [level=1]: Countries
+                        - button [expanded]: Add Country
+                    - generic:
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - generic:
+                                        - generic:
+                                            - generic: Australia
+                                            - generic: oceania · AU · AUD · English
+                                    - generic:
+                                        - generic: Destination
+                                        - generic:
+                                            - button:
+                                                - generic: Published
+                                            - button
+                                            - button
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - generic:
+                                        - generic:
+                                            - generic: Austria
+                                            - generic: europe · AT · EUR · German
+                                    - generic:
+                                        - generic: Origin
+                                        - generic:
+                                            - button:
+                                                - generic: Published
+                                            - button
+                                            - button
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - generic:
+                                        - generic:
+                                            - generic: Brazil
+                                            - generic: americas · BR · BRL · Portuguese
+                                    - generic:
+                                        - generic: Destination
+                                        - generic:
+                                            - button:
+                                                - generic: Draft
+                                            - button
+                                            - button
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - generic:
+                                        - generic:
+                                            - generic: Mauritius
+                                            - generic: africa · MU · MUR · English
+                                    - generic:
+                                        - generic: Destination
+                                        - generic:
+                                            - button:
+                                                - generic: Published
+                                            - button
+                                            - button
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - generic:
+                                        - generic:
+                                            - generic: Mozambique
+                                            - generic: africa · MZ · MZN · Portuguese
+                                    - generic:
+                                        - generic: Destination
+                                        - generic:
+                                            - button:
+                                                - generic: Published
+                                            - button
+                                            - button
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - generic:
+                                        - generic:
+                                            - generic: Rwanda
+                                            - generic: africa · RW · RWF · English
+                                    - generic:
+                                        - generic: Destination
+                                        - generic:
+                                            - button:
+                                                - generic: Draft
+                                            - button
+                                            - button
+                        - generic:
+                            - generic:
+                                - generic:
+                                    - generic:
+                                        - generic:
+                                            - generic: Tanzania
+                                            - generic: africa · TZ · TZS · English
+                                    - generic:
+                                        - generic: Destination
+                                        - generic:
+                                            - button:
+                                                - generic: Draft
+                                            - button
+                                            - button
+            - contentinfo:
+                - generic:
+                    - generic:
+                        - generic: relocate.fyi
+                        - generic: Verified relocation intelligence · Data reviewed Oct 2025
+    - dialog "Add New Country" [ref=e147]:
+        - generic [ref=e148]:
+            - generic [ref=e149]:
+                - heading "Add New Country" [level=2] [ref=e150]
+                - paragraph [ref=e151]: Create a new country and its associated profiles.
+            - button "Close" [active] [ref=e152] [cursor=pointer]
+        - generic [ref=e155]:
+            - generic [ref=e156]:
+                - generic [ref=e159]: Country*
+                - generic [ref=e162]:
+                    - button "Show popup" [ref=e163] [cursor=pointer]:
+                        - generic [ref=e164]: Select a country
+                    - textbox [ref=e167]
+            - generic [ref=e168]:
+                - generic [ref=e169]:
+                    - generic [ref=e172]: Currency Code
+                    - button "Show popup" [ref=e174] [cursor=pointer]:
+                        - generic [ref=e175]: Select currency
+                - generic [ref=e178]:
+                    - generic [ref=e181]: Primary Language
+                    - button "Show popup" [ref=e183] [cursor=pointer]:
+                        - generic [ref=e184]: Select language
+            - generic [ref=e187]:
+                - generic [ref=e190]: Region*
+                - generic [ref=e191]:
+                    - combobox "Region*" [ref=e192] [cursor=pointer]:
+                        - generic: Europe
+                    - combobox [ref=e195]
+            - generic [ref=e196]:
+                - generic [ref=e198]:
+                    - generic [ref=e199]:
+                        - generic [ref=e201]: Destination Profile
+                        - paragraph [ref=e202]: Create a destination profile for this country
+                    - switch "Destination Profile" [checked] [ref=e206] [cursor=pointer]
+                - generic [ref=e208]:
+                    - generic [ref=e209]:
+                        - generic [ref=e211]: Origin Profile
+                        - paragraph [ref=e212]: Create an origin profile for this country
+                    - switch "Origin Profile" [ref=e216] [cursor=pointer]
+        - generic [ref=e218]:
+            - button "Cancel" [ref=e219] [cursor=pointer]
+            - button "Create Country" [ref=e220] [cursor=pointer]

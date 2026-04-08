@@ -19,6 +19,7 @@
 
       <ProfileSectionCard
         :notes="profile.taxNotes"
+        :source-url="profile.taxSourceUrl"
         :verified-at="formatDate(profile.taxVerifiedAt)"
         title="Tax structure"
       >
@@ -38,6 +39,7 @@
 
       <ProfileSectionCard
         :notes="profile.bankingNotes"
+        :source-url="profile.bankingSourceUrl"
         :verified-at="formatDate(profile.bankingVerifiedAt)"
         title="Banking"
       >
@@ -78,6 +80,7 @@
 
       <ProfileSectionCard
         :notes="profile.healthcareQualityNotes"
+        :source-url="profile.healthcareSourceUrl"
         :verified-at="formatDate(profile.healthcareVerifiedAt)"
         title="Healthcare"
       >
@@ -100,6 +103,7 @@
 
       <ProfileSectionCard
         :notes="profile.costNotes"
+        :source-url="profile.costSourceUrl"
         :verified-at="formatDate(profile.costVerifiedAt)"
         title="Cost of living"
       >
@@ -132,6 +136,7 @@
 
       <ProfileSectionCard
         :notes="profile.frictionNotes"
+        :source-url="profile.frictionSourceUrl"
         :verified-at="formatDate(profile.frictionVerifiedAt)"
         title="Practical requirements"
       >

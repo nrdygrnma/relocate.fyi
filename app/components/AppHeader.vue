@@ -23,12 +23,12 @@
           >
             Pathway finder
           </NuxtLink>
+          <UButton icon="i-heroicons-arrow-right" size="xs" to="/pathway-finder" trailing>
+            Get started
+          </UButton>
           <USeparator class="h-4" orientation="vertical" />
           <UButton icon="i-heroicons-cog-6-tooth" size="xs" to="/admin" variant="outline">
             Admin
-          </UButton>
-          <UButton icon="i-heroicons-arrow-right" size="xs" to="/pathway-finder" trailing>
-            Get started
           </UButton>
         </nav>
       </div>

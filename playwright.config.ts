@@ -1,24 +1,44 @@
-import { fileURLToPath } from 'node:url'
-import { defineConfig, devices } from '@playwright/test'
-import type { ConfigOptions } from '@nuxt/test-utils/playwright'
+/// <reference types="node" />
+import { defineConfig } from '@playwright/test'
+import * as os from 'node:os'
 
-export default defineConfig<ConfigOptions>({
-  testDir: './tests',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
+export default defineConfig({
+  testDir: 'test',
+  testMatch: '**/*.spec.ts',
+  outputDir: 'test-results',
+  workers: 1,
+  fullyParallel: false,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [
+    ['line'],
+    [
+      'allure-playwright',
+      {
+        resultsDir: 'allure-results',
+        detail: true,
+        suiteTitle: false,
+        environmentInfo: {
+          os_platform: os.platform(),
+          os_release: os.release(),
+          os_version: os.version(),
+          node_version: process.version
+        }
+      }
+    ]
+  ],
   use: {
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
-    nuxt: {
-      rootDir: fileURLToPath(new URL('.', import.meta.url))
-    }
+    screenshot: 'only-on-failure',
+    video: 'off'
   },
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+    env: {
+      VITE_COVERAGE: 'true'
     }
-  ]
+  }
 })

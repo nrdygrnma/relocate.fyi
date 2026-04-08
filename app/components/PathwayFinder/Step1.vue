@@ -10,6 +10,7 @@
         :items="countryOptions"
         class="w-full"
         placeholder="Select your country..."
+        searchable
       />
     </UFormField>
   </div>
@@ -18,23 +19,15 @@
 <script lang="ts" setup>
 const store = usePathwayFinderStore()
 
-const countryOptions = [
-  { label: 'Austria', value: 'AT' },
-  { label: 'Germany', value: 'DE' },
-  { label: 'Switzerland', value: 'CH' },
-  { label: 'United Kingdom', value: 'GB' },
-  { label: 'France', value: 'FR' },
-  { label: 'Netherlands', value: 'NL' },
-  { label: 'Belgium', value: 'BE' },
-  { label: 'Sweden', value: 'SE' },
-  { label: 'Norway', value: 'NO' },
-  { label: 'Denmark', value: 'DK' },
-  { label: 'United States', value: 'US' },
-  { label: 'Canada', value: 'CA' },
-  { label: 'Australia', value: 'AU' },
-  { label: 'New Zealand', value: 'NZ' },
-  { label: 'South Africa', value: 'ZA' },
-  { label: 'India', value: 'IN' },
-  { label: 'Singapore', value: 'SG' }
-]
+interface CountryOption {
+  label: string
+  value: string
+}
+
+const countryOptions = ref<CountryOption[]>([])
+
+onMounted(async () => {
+  const data = await $fetch<{ isoCode: string; name: string }[]>('/api/reference/countries')
+  countryOptions.value = data.map((c) => ({ label: c.name, value: c.isoCode }))
+})
 </script>

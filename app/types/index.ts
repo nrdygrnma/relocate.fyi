@@ -43,7 +43,9 @@ export interface Step {
   dependsOn: string | null
   mustCompleteBefore: string | null
   officialUrl: string | null
+  cost: number | null
   costUsd: number | null
+  currencyCode: string | null
   originSide: boolean
   createdAt: string
   updatedAt: string
@@ -73,7 +75,9 @@ export interface Pathway {
   processingWeeksMin: number | null
   processingWeeksMax: number | null
   inPersonRequired: boolean
+  governmentFee: number | null
   governmentFeeUsd: number | null
+  currencyCode: string | null
   processNotes: string | null
   lastVerifiedAt: string | null
   sourceUrl: string | null
@@ -81,6 +85,16 @@ export interface Pathway {
   updatedAt: string
   eligibilityRules: EligibilityRule[]
   steps: Step[]
+  destinationProfile?: {
+    id: string
+    slug: string
+    country: {
+      id: string
+      name: string
+      isoCode: string
+      currencyCode: string | null
+    }
+  }
 }
 
 export interface DestinationProfile {
@@ -184,46 +198,4 @@ export interface OriginProfile {
 export interface ProfileResponse {
   type: 'destination' | 'origin'
   data: DestinationProfile | OriginProfile
-}
-
-export interface Pathway {
-  id: string
-  destinationProfileId: string
-  name: string
-  slug: string
-  officialName: string | null
-  summary: string | null
-  pathwayType: string
-  published: boolean
-  durationYears: number | null
-  renewable: boolean
-  renewalDetail: string | null
-  leadsToPr: boolean
-  prTimelineYears: number | null
-  dependentsAllowed: boolean
-  dependentTypes: string | null
-  workAllowed: string
-  stayRequirementDaysPA: number | null
-  propertyPurchaseRequired: boolean
-  propertyMinValueUsd: number | null
-  applicationStages: string | null
-  processingWeeksMin: number | null
-  processingWeeksMax: number | null
-  inPersonRequired: boolean
-  governmentFeeUsd: number | null
-  processNotes: string | null
-  lastVerifiedAt: string | null
-  sourceUrl: string | null
-  createdAt: string
-  updatedAt: string
-  eligibilityRules: EligibilityRule[]
-  steps: Step[]
-  destinationProfile?: {
-    slug: string
-    country: {
-      id: string
-      name: string
-      isoCode: string
-    }
-  }
 }

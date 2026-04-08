@@ -22,7 +22,7 @@ The platform provides:
 ## Tech stack
 
 | Layer            | Technology                      |
-|------------------|---------------------------------|
+| ---------------- | ------------------------------- |
 | Framework        | Nuxt 4 (Vue 3, Composition API) |
 | State management | Pinia                           |
 | Database         | SQLite (via Prisma)             |
@@ -147,14 +147,14 @@ and flag sections that may need review.
 ## Current data coverage
 
 | Country   | Type        | Status    |
-|-----------|-------------|-----------|
+| --------- | ----------- | --------- |
 | Mauritius | Destination | Published |
 | Austria   | Origin      | Published |
 
 ## Roadmap
 
 | Phase | Focus                                         | Status      |
-|-------|-----------------------------------------------|-------------|
+| ----- | --------------------------------------------- | ----------- |
 | 1     | Schema design + seed data                     | Done        |
 | 2     | Nuxt app + API layer                          | Done        |
 | 3     | Pathway finder + user accounts                | In progress |
@@ -172,7 +172,7 @@ and flag sections that may need review.
 ## Environment variables
 
 | Variable     | Description                  | Default       |
-|--------------|------------------------------|---------------|
+| ------------ | ---------------------------- | ------------- |
 | DATABASE_URL | Path to SQLite database file | file:./dev.db |
 
 ## License

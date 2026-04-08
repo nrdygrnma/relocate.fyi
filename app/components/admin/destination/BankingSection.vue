@@ -36,7 +36,7 @@
 import type { DestinationProfile } from '~/types'
 
 const form = defineModel<Partial<DestinationProfile>>({ required: true })
-const neobankOptions = ['yes', 'no', 'partial', 'unknown']
+const neobankOptions = ['High', 'Moderate', 'Low', 'Unknown']
 const neobankAccepted = useNullableString(form, 'neobankAccepted')
 const minDepositAmountUsd = useNullableNumber(form, 'minDepositAmountUsd')
 const bankingSourceUrl = useNullableString(form, 'bankingSourceUrl')

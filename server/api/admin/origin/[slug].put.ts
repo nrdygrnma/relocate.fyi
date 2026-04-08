@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const profile = await prisma.originProfile.update({
     where: { slug },
+    include: { country: true },
     data: {
       summary: body.summary,
       taxResidencyRule: body.taxResidencyRule,

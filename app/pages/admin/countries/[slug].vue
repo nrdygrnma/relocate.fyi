@@ -13,14 +13,25 @@
       </div>
 
       <div v-else-if="profile" class="space-y-6 max-w-3xl mx-auto">
-        <div class="mb-6">
-          <h1 class="text-2xl font-bold tracking-tight">
-            {{ profile.country?.name }}
-          </h1>
-          <p class="text-sm text-gray-400 mt-1">
-            {{ isDestination ? 'Destination profile' : 'Origin profile' }} · Last reviewed
-            {{ profile.lastEditorialReview ? profile.lastEditorialReview.slice(0, 10) : 'never' }}
-          </p>
+        <div class="mb-6 flex justify-between items-end">
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight">
+              {{ profile.country?.name }}
+            </h1>
+            <p class="text-sm text-gray-400 mt-1">
+              {{ isDestination ? 'Destination profile' : 'Origin profile' }} · Last reviewed
+              {{ profile.lastEditorialReview ? profile.lastEditorialReview.slice(0, 10) : 'never' }}
+            </p>
+          </div>
+          <UButton
+            :loading="store.loading"
+            color="neutral"
+            icon="i-heroicons-sparkles"
+            variant="outline"
+            @click="generateAI"
+          >
+            AI Assist
+          </UButton>
         </div>
 
         <AdminSectionCard
@@ -88,8 +99,38 @@ const originForm = form as Partial<OriginProfile>
 const formRef = toRef(() => form) as Ref<Partial<DestinationProfile> & Partial<OriginProfile>>
 const summary = useNullableString(formRef, 'summary')
 
-const originalForm = JSON.stringify(form)
-const dirty = computed(() => JSON.stringify(form) !== originalForm)
+const originalForm = ref(JSON.stringify(form))
+const dirty = computed(() => JSON.stringify(form) !== originalForm.value)
+
+async function generateAI() {
+  if (!profile.value?.country?.name) return
+
+  const data = await store.generateAIProfile(
+    profile.value.country.name,
+    isDestination ? 'destination' : 'origin'
+  )
+
+  if (data) {
+    // Merge generated data into form
+    Object.keys(data).forEach((key) => {
+      if (key in form) {
+        // @ts-ignore
+        form[key] = data[key]
+      }
+    })
+    toast.add({
+      title: 'AI Draft Generated',
+      description: 'Review and save the suggested content.',
+      color: 'success'
+    })
+  } else {
+    toast.add({
+      title: 'AI Assist Failed',
+      description: store.error || 'Failed to generate profile.',
+      color: 'error'
+    })
+  }
+}
 
 async function save() {
   let success = false
@@ -99,6 +140,7 @@ async function save() {
     success = await store.saveOriginProfile(slug, originForm)
   }
   if (success) {
+    originalForm.value = JSON.stringify(form)
     toast.add({ title: 'Saved', description: 'Profile updated successfully', color: 'success' })
   } else {
     toast.add({ title: 'Error', description: store.error ?? 'Failed to save', color: 'error' })

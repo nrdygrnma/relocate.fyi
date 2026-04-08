@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
 
   const profile = await prisma.destinationProfile.update({
     where: { slug },
+    include: { country: true },
     data: {
       summary: body.summary,
       taxBasis: body.taxBasis,

@@ -34,7 +34,7 @@
 import type { DestinationProfile } from '~/types'
 
 const form = defineModel<Partial<DestinationProfile>>({ required: true })
-const healthcareAccessOptions = ['full', 'limited', 'none']
+const healthcareAccessOptions = ['Full', 'Limited', 'None']
 
 const publicHealthcareAccess = useNullableString(form, 'publicHealthcareAccess')
 const avgPrivateInsuranceUsdPa = useNullableNumber(form, 'avgPrivateInsuranceUsdPa')
