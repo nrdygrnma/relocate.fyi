@@ -7,7 +7,8 @@
     <UAlert v-else-if="store.error" :description="store.error" color="error" />
 
     <div v-else-if="profile" class="space-y-6 max-w-4xl mx-auto">
-      <div class="mb-8">
+      <!-- Header -->
+      <div class="mb-2">
         <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
           <NuxtLink class="hover:text-gray-600" to="/">Countries</NuxtLink>
           <UIcon name="i-heroicons-chevron-right" />
@@ -17,16 +18,69 @@
         <p class="text-gray-500 text-lg max-w-3xl">{{ profile.summary }}</p>
       </div>
 
+      <!-- Snapshot bar -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-gray-50 dark:bg-gray-800/60 rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-gray-900 dark:text-white">
+            {{ profile.costTier ?? '–' }}
+          </div>
+          <div class="text-xs text-gray-400 mt-1">Cost of living</div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800/60 rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-gray-900 dark:text-white">
+            {{ profile.taxBasis ?? '–' }}
+          </div>
+          <div class="text-xs text-gray-400 mt-1">Tax basis</div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800/60 rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-gray-900 dark:text-white">
+            {{ profile.pathways.length }}
+          </div>
+          <div class="text-xs text-gray-400 mt-1">Pathways</div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800/60 rounded-xl p-4 text-center">
+          <div class="text-2xl font-bold text-gray-900 dark:text-white">
+            {{ bestProcessingTime }}
+          </div>
+          <div class="text-xs text-gray-400 mt-1">Fastest processing</div>
+        </div>
+      </div>
+
+      <!-- Pathways (hero position) -->
+      <div v-if="profile.pathways.length">
+        <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
+          Available pathways
+        </h2>
+        <div class="space-y-4">
+          <PathwayCard v-for="pathway in profile.pathways" :key="pathway.id" :pathway="pathway" />
+        </div>
+      </div>
+
+      <!-- CTA for finder if no pathways -->
+      <div
+        v-else
+        class="rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 p-8 text-center"
+      >
+        <p class="text-gray-400 mb-3">No published pathways for this country yet.</p>
+        <UButton to="/pathway-finder" variant="outline">Browse all pathways</UButton>
+      </div>
+
+      <USeparator />
+
+      <!-- Collapsible detail sections -->
       <ProfileSectionCard
+        :collapsible="true"
+        :default-open="false"
         :notes="profile.taxNotes"
         :source-url="profile.taxSourceUrl"
+        :status="profile.taxStatus"
         :verified-at="formatDate(profile.taxVerifiedAt)"
         title="Tax structure"
       >
         <ProfileFactGrid>
           <ProfileFactItem :value="profile.taxBasis" label="Tax basis" />
           <ProfileFactItem
-            :value="`${profile.incomeTaxRateMin}% – ${profile.incomeTaxRateMax}%`"
+            :value="incomeTaxRange"
             label="Income tax"
           />
           <ProfileFactItem
@@ -38,8 +92,11 @@
       </ProfileSectionCard>
 
       <ProfileSectionCard
+        :collapsible="true"
+        :default-open="false"
         :notes="profile.bankingNotes"
         :source-url="profile.bankingSourceUrl"
+        :status="profile.bankingStatus"
         :verified-at="formatDate(profile.bankingVerifiedAt)"
         title="Banking"
       >
@@ -47,16 +104,16 @@
           <ProfileFactItem label="Neobank accepted">
             <UBadge
               :color="
-                profile.neobankAccepted === 'yes'
+                profile.neobankAccepted === 'High'
                   ? 'success'
-                  : profile.neobankAccepted === 'partial'
+                  : profile.neobankAccepted === 'Moderate'
                     ? 'warning'
                     : 'error'
               "
               class="capitalize"
               variant="subtle"
             >
-              {{ profile.neobankAccepted }}
+              {{ profile.neobankAccepted ?? 'Unknown' }}
             </UBadge>
           </ProfileFactItem>
           <ProfileFactItem
@@ -79,8 +136,11 @@
       </ProfileSectionCard>
 
       <ProfileSectionCard
+        :collapsible="true"
+        :default-open="false"
         :notes="profile.healthcareQualityNotes"
         :source-url="profile.healthcareSourceUrl"
+        :status="profile.healthcareStatus"
         :verified-at="formatDate(profile.healthcareVerifiedAt)"
         title="Healthcare"
       >
@@ -102,8 +162,11 @@
       </ProfileSectionCard>
 
       <ProfileSectionCard
+        :collapsible="true"
+        :default-open="false"
         :notes="profile.costNotes"
         :source-url="profile.costSourceUrl"
+        :status="profile.costStatus"
         :verified-at="formatDate(profile.costVerifiedAt)"
         title="Cost of living"
       >
@@ -135,8 +198,11 @@
       </ProfileSectionCard>
 
       <ProfileSectionCard
+        :collapsible="true"
+        :default-open="false"
         :notes="profile.frictionNotes"
         :source-url="profile.frictionSourceUrl"
+        :status="profile.frictionStatus"
         :verified-at="formatDate(profile.frictionVerifiedAt)"
         title="Practical requirements"
       >
@@ -162,15 +228,6 @@
           {{ profile.inPersonDetail }}
         </p>
       </ProfileSectionCard>
-
-      <div>
-        <h2 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
-          Available pathways
-        </h2>
-        <div class="space-y-6">
-          <PathwayCard v-for="pathway in profile.pathways" :key="pathway.id" :pathway="pathway" />
-        </div>
-      </div>
     </div>
   </UContainer>
 </template>
@@ -188,6 +245,23 @@ const profile = computed(() => {
     return store.currentProfile.data as DestinationProfile
   }
   return null
+})
+
+const bestProcessingTime = computed(() => {
+  if (!profile.value?.pathways.length) return '–'
+  const mins = profile.value.pathways
+    .map((p) => p.processingWeeksMin)
+    .filter((v): v is number => v !== null)
+  if (!mins.length) return '–'
+  return `${Math.min(...mins)}wk`
+})
+
+const incomeTaxRange = computed(() => {
+  if (!profile.value) return null
+  const { incomeTaxRateMin: min, incomeTaxRateMax: max } = profile.value
+  if (min === null && max === null) return null
+  if (min === max) return `${min}%`
+  return `${min ?? 0}% – ${max ?? 0}%`
 })
 
 function formatDate(date: string | null | undefined): string {

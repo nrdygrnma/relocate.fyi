@@ -149,6 +149,11 @@ export interface DestinationProfile {
   frictionNotes: string | null
   frictionVerifiedAt: string | null
   frictionSourceUrl: string | null
+  taxStatus: string | null
+  bankingStatus: string | null
+  healthcareStatus: string | null
+  costStatus: string | null
+  frictionStatus: string | null
   lastEditorialReview: string | null
   createdAt: string
   updatedAt: string
@@ -190,6 +195,10 @@ export interface OriginProfile {
   otherExitDocuments: string | null
   documentsVerifiedAt: string | null
   documentsSourceUrl: string | null
+  taxExitStatus: string | null
+  deregStatus: string | null
+  financialStatus: string | null
+  documentsStatus: string | null
   lastEditorialReview: string | null
   createdAt: string
   updatedAt: string

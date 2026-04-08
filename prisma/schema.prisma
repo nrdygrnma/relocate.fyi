@@ -109,6 +109,12 @@ model DestinationProfile {
   frictionVerifiedAt      DateTime?
   frictionSourceUrl       String?
 
+  taxStatus        String?   @default("draft")
+  bankingStatus    String?   @default("draft")
+  healthcareStatus String?   @default("draft")
+  costStatus       String?   @default("draft")
+  frictionStatus   String?   @default("draft")
+
   lastEditorialReview DateTime?
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
@@ -155,6 +161,11 @@ model OriginProfile {
   otherExitDocuments            String?
   documentsVerifiedAt           DateTime?
   documentsSourceUrl            String?
+
+  taxExitStatus   String?   @default("draft")
+  deregStatus     String?   @default("draft")
+  financialStatus String?   @default("draft")
+  documentsStatus String?   @default("draft")
 
   lastEditorialReview DateTime?
   createdAt           DateTime  @default(now())

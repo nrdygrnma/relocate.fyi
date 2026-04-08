@@ -8,7 +8,8 @@
       "Bash(python3:*)",
       "Bash(awk 'NR==515' \"C:/Users/ms_le/.claude/projects/D--10-Work-development-relocate-fyi/92320c83-9b05-42aa-8c05-4b8e44513189.jsonl\")",
       "Read(//tmp/**)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npx prisma:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

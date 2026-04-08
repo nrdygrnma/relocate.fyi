@@ -44,19 +44,13 @@
       <!-- Inline stats -->
       <div class="hidden sm:flex items-center gap-4 text-xs text-gray-400 shrink-0">
         <span v-if="result.pathway.durationYears">
-          <span class="font-medium text-gray-700 dark:text-gray-300"
-            >{{ result.pathway.durationYears }}yr</span
-          >
+          <span class="font-medium text-gray-700 dark:text-gray-300">{{ result.pathway.durationYears }}yr</span>
         </span>
         <span v-if="result.pathway.processingWeeksMin">
-          <span class="font-medium text-gray-700 dark:text-gray-300"
-            >{{ result.pathway.processingWeeksMin }}–{{ result.pathway.processingWeeksMax }}wk</span
-          >
+          <span class="font-medium text-gray-700 dark:text-gray-300">{{ result.pathway.processingWeeksMin }}–{{ result.pathway.processingWeeksMax }}wk</span>
         </span>
         <span v-if="result.pathway.governmentFeeUsd">
-          ~$<span class="font-medium text-gray-700 dark:text-gray-300">{{
-            result.pathway.governmentFeeUsd.toLocaleString()
-          }}</span>
+          ~$<span class="font-medium text-gray-700 dark:text-gray-300">{{ result.pathway.governmentFeeUsd.toLocaleString() }}</span>
         </span>
       </div>
 
@@ -71,67 +65,62 @@
     <div v-if="open" class="px-4 pb-4 space-y-4" @click.stop>
       <!-- Mobile stats -->
       <div class="flex sm:hidden flex-wrap gap-4 text-xs text-gray-500">
-        <span v-if="result.pathway.durationYears"
-          >Duration: <strong>{{ result.pathway.durationYears }} yr</strong></span
-        >
-        <span v-if="result.pathway.processingWeeksMin"
-          >Processing:
-          <strong
-            >{{ result.pathway.processingWeeksMin }}–{{
-              result.pathway.processingWeeksMax
-            }}
-            wk</strong
-          ></span
-        >
-        <span v-if="result.pathway.governmentFeeUsd"
-          >Fee: <strong>~${{ result.pathway.governmentFeeUsd.toLocaleString() }}</strong></span
-        >
-        <span v-if="result.pathway.workAllowed"
-          >Work: <strong class="capitalize">{{ result.pathway.workAllowed }}</strong></span
-        >
+        <span v-if="result.pathway.durationYears">Duration: <strong>{{ result.pathway.durationYears }} yr</strong></span>
+        <span v-if="result.pathway.processingWeeksMin">Processing: <strong>{{ result.pathway.processingWeeksMin }}–{{ result.pathway.processingWeeksMax }} wk</strong></span>
+        <span v-if="result.pathway.governmentFeeUsd">Fee: <strong>~${{ result.pathway.governmentFeeUsd.toLocaleString() }}</strong></span>
+        <span v-if="result.pathway.workAllowed">Work: <strong class="capitalize">{{ result.pathway.workAllowed }}</strong></span>
       </div>
 
       <p v-if="result.pathway.summary" class="text-sm text-gray-500 leading-relaxed">
         {{ result.pathway.summary }}
       </p>
 
-      <div class="flex flex-wrap gap-4">
-        <!-- Passed rules -->
-        <div v-if="result.passedRules.length" class="flex-1 min-w-48 space-y-1">
-          <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
-            You qualify
-          </div>
-          <div
-            v-for="rule in result.passedRules"
-            :key="rule.id"
-            class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300"
-          >
-            <UIcon class="text-success shrink-0" name="i-heroicons-check-circle" />
-            {{ rule.displayLabel }}
-          </div>
-        </div>
+      <!-- Eligibility / Checklist tabs -->
+      <UTabs :items="detailTabs" size="sm">
+        <template #eligibility>
+          <div class="pt-3 flex flex-wrap gap-4">
+            <!-- Passed rules -->
+            <div v-if="result.passedRules.length" class="flex-1 min-w-48 space-y-1">
+              <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">You qualify</div>
+              <div
+                v-for="rule in result.passedRules"
+                :key="rule.id"
+                class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300"
+              >
+                <UIcon class="text-success shrink-0" name="i-heroicons-check-circle" />
+                {{ rule.displayLabel }}
+              </div>
+            </div>
 
-        <!-- Failed rules -->
-        <div v-if="result.failedRules.length" class="flex-1 min-w-48 space-y-1">
-          <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
-            Requirements not met
+            <!-- Failed rules -->
+            <div v-if="result.failedRules.length" class="flex-1 min-w-48 space-y-1">
+              <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Requirements not met</div>
+              <div
+                v-for="rule in result.failedRules"
+                :key="rule.id"
+                :class="rule.hardRequirement ? 'text-error' : 'text-warning'"
+                class="flex items-center gap-1.5 text-xs"
+              >
+                <UIcon
+                  :name="rule.hardRequirement ? 'i-heroicons-x-circle' : 'i-heroicons-exclamation-circle'"
+                  class="shrink-0"
+                />
+                {{ rule.displayLabel }}
+              </div>
+            </div>
+
+            <div v-if="!result.passedRules.length && !result.failedRules.length" class="text-sm text-gray-400">
+              No eligibility rules defined.
+            </div>
           </div>
-          <div
-            v-for="rule in result.failedRules"
-            :key="rule.id"
-            :class="rule.hardRequirement ? 'text-error' : 'text-warning'"
-            class="flex items-center gap-1.5 text-xs"
-          >
-            <UIcon
-              :name="
-                rule.hardRequirement ? 'i-heroicons-x-circle' : 'i-heroicons-exclamation-circle'
-              "
-              class="shrink-0"
-            />
-            {{ rule.displayLabel }}
+        </template>
+
+        <template #checklist>
+          <div class="pt-3">
+            <PathwayFinderChecklist :origin-country-name="originCountryName" :pathway="result.pathway" />
           </div>
-        </div>
-      </div>
+        </template>
+      </UTabs>
 
       <div class="flex items-center justify-between pt-1 gap-4">
         <a
@@ -165,6 +154,15 @@
 <script lang="ts" setup>
 import type { PathwayMatch } from '~/stores/pathwayFinder'
 
-defineProps<{ result: PathwayMatch }>()
+const props = defineProps<{
+  result: PathwayMatch
+  originCountryName?: string
+}>()
+
 const open = ref(false)
+
+const detailTabs = [
+  { label: 'Eligibility', slot: 'eligibility', icon: 'i-heroicons-check-badge' },
+  { label: 'Checklist', slot: 'checklist', icon: 'i-heroicons-list-bullet' }
+]
 </script>

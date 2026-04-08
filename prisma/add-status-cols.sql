@@ -1,0 +1,9 @@
+ALTER TABLE DestinationProfile ADD COLUMN taxStatus TEXT DEFAULT 'draft';
+ALTER TABLE DestinationProfile ADD COLUMN bankingStatus TEXT DEFAULT 'draft';
+ALTER TABLE DestinationProfile ADD COLUMN healthcareStatus TEXT DEFAULT 'draft';
+ALTER TABLE DestinationProfile ADD COLUMN costStatus TEXT DEFAULT 'draft';
+ALTER TABLE DestinationProfile ADD COLUMN frictionStatus TEXT DEFAULT 'draft';
+ALTER TABLE OriginProfile ADD COLUMN taxExitStatus TEXT DEFAULT 'draft';
+ALTER TABLE OriginProfile ADD COLUMN deregStatus TEXT DEFAULT 'draft';
+ALTER TABLE OriginProfile ADD COLUMN financialStatus TEXT DEFAULT 'draft';
+ALTER TABLE OriginProfile ADD COLUMN documentsStatus TEXT DEFAULT 'draft';

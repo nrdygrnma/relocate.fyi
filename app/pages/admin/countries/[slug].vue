@@ -12,7 +12,7 @@
         <UIcon class="animate-spin text-3xl text-gray-400" name="i-heroicons-arrow-path" />
       </div>
 
-      <div v-else-if="profile" class="space-y-6 max-w-3xl mx-auto">
+      <div v-else-if="profile" class="max-w-3xl mx-auto">
         <div class="mb-6 flex justify-between items-end">
           <div>
             <h1 class="text-2xl font-bold tracking-tight">
@@ -34,37 +34,118 @@
           </UButton>
         </div>
 
-        <AdminSectionCard
-          description="Short overview shown at the top of the public profile page"
-          icon="i-heroicons-document-text"
-          title="Summary"
-        >
-          <UFormField label="Summary">
-            <UTextarea
-              v-model="summary"
-              :rows="4"
-              class="w-full"
-              placeholder="2–3 sentence overview of this country for relocators..."
-            />
-          </UFormField>
-        </AdminSectionCard>
-
+        <!-- Destination: tab-based editor -->
         <template v-if="isDestination">
-          <AdminDestinationTaxSection v-model="destinationForm" />
-          <AdminDestinationBankingSection v-model="destinationForm" />
-          <AdminDestinationHealthcareSection v-model="destinationForm" />
-          <AdminDestinationCostSection v-model="destinationForm" />
-          <AdminDestinationFrictionSection v-model="destinationForm" />
+          <UTabs :items="destinationTabs" class="w-full">
+            <template #summary>
+              <div class="py-4 space-y-6">
+                <AdminSectionCard
+                  description="Short overview shown at the top of the public profile page"
+                  icon="i-heroicons-document-text"
+                  title="Summary"
+                >
+                  <UFormField label="Summary">
+                    <UTextarea
+                      v-model="summary"
+                      :rows="4"
+                      class="w-full"
+                      placeholder="2–3 sentence overview of this country for relocators..."
+                    />
+                  </UFormField>
+                </AdminSectionCard>
+              </div>
+            </template>
+
+            <template #tax>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="destinationForm.taxStatus" />
+                <AdminDestinationTaxSection v-model="destinationForm" />
+              </div>
+            </template>
+
+            <template #banking>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="destinationForm.bankingStatus" />
+                <AdminDestinationBankingSection v-model="destinationForm" />
+              </div>
+            </template>
+
+            <template #healthcare>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="destinationForm.healthcareStatus" />
+                <AdminDestinationHealthcareSection v-model="destinationForm" />
+              </div>
+            </template>
+
+            <template #cost>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="destinationForm.costStatus" />
+                <AdminDestinationCostSection v-model="destinationForm" />
+              </div>
+            </template>
+
+            <template #friction>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="destinationForm.frictionStatus" />
+                <AdminDestinationFrictionSection v-model="destinationForm" />
+              </div>
+            </template>
+          </UTabs>
         </template>
 
+        <!-- Origin: tab-based editor -->
         <template v-else>
-          <AdminOriginTaxExitSection v-model="originForm" />
-          <AdminOriginDeregistrationSection v-model="originForm" />
-          <AdminOriginFinancialSection v-model="originForm" />
-          <AdminOriginDocumentsSection v-model="originForm" />
+          <UTabs :items="originTabs" class="w-full">
+            <template #summary>
+              <div class="py-4 space-y-6">
+                <AdminSectionCard
+                  description="Short overview shown at the top of the public profile page"
+                  icon="i-heroicons-document-text"
+                  title="Summary"
+                >
+                  <UFormField label="Summary">
+                    <UTextarea
+                      v-model="summary"
+                      :rows="4"
+                      class="w-full"
+                      placeholder="2–3 sentence overview of this country for relocators..."
+                    />
+                  </UFormField>
+                </AdminSectionCard>
+              </div>
+            </template>
+
+            <template #taxexit>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="originForm.taxExitStatus" />
+                <AdminOriginTaxExitSection v-model="originForm" />
+              </div>
+            </template>
+
+            <template #dereg>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="originForm.deregStatus" />
+                <AdminOriginDeregistrationSection v-model="originForm" />
+              </div>
+            </template>
+
+            <template #financial>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="originForm.financialStatus" />
+                <AdminOriginFinancialSection v-model="originForm" />
+              </div>
+            </template>
+
+            <template #documents>
+              <div class="py-4 space-y-4">
+                <AdminStatusBadge v-model="originForm.documentsStatus" />
+                <AdminOriginDocumentsSection v-model="originForm" />
+              </div>
+            </template>
+          </UTabs>
         </template>
 
-        <div class="flex justify-end pt-4">
+        <div class="flex justify-end pt-6">
           <UButton :loading="store.saving" icon="i-heroicons-check" @click="save">
             Save changes
           </UButton>
@@ -102,6 +183,23 @@ const summary = useNullableString(formRef, 'summary')
 const originalForm = ref(JSON.stringify(form))
 const dirty = computed(() => JSON.stringify(form) !== originalForm.value)
 
+const destinationTabs = [
+  { label: 'Summary', slot: 'summary', icon: 'i-heroicons-document-text' },
+  { label: 'Tax', slot: 'tax', icon: 'i-heroicons-building-library' },
+  { label: 'Banking', slot: 'banking', icon: 'i-heroicons-credit-card' },
+  { label: 'Healthcare', slot: 'healthcare', icon: 'i-heroicons-heart' },
+  { label: 'Cost', slot: 'cost', icon: 'i-heroicons-banknotes' },
+  { label: 'Friction', slot: 'friction', icon: 'i-heroicons-clipboard-document-check' }
+]
+
+const originTabs = [
+  { label: 'Summary', slot: 'summary', icon: 'i-heroicons-document-text' },
+  { label: 'Tax Exit', slot: 'taxexit', icon: 'i-heroicons-building-library' },
+  { label: 'Deregistration', slot: 'dereg', icon: 'i-heroicons-home' },
+  { label: 'Financial', slot: 'financial', icon: 'i-heroicons-banknotes' },
+  { label: 'Documents', slot: 'documents', icon: 'i-heroicons-document' }
+]
+
 async function generateAI() {
   if (!profile.value?.country?.name) return
 
@@ -111,7 +209,6 @@ async function generateAI() {
   )
 
   if (data) {
-    // Merge generated data into form
     Object.keys(data).forEach((key) => {
       if (key in form) {
         // @ts-ignore
