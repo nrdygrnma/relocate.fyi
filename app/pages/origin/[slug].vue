@@ -18,8 +18,10 @@
       </div>
 
       <ProfileSectionCard
+        :collapsible="true"
         :notes="profile.taxExitNotes"
         :source-url="profile.taxExitSourceUrl"
+        :status="profile.taxExitStatus"
         :verified-at="formatDate(profile.taxExitVerifiedAt)"
         title="Tax liability exit"
       >
@@ -50,7 +52,14 @@
         </p>
       </ProfileSectionCard>
 
-      <ProfileSectionCard :source-url="profile.deregSourceUrl" :verified-at="formatDate(profile.deregVerifiedAt)" title="Deregistration">
+      <ProfileSectionCard
+        :collapsible="true"
+        :default-open="false"
+        :source-url="profile.deregSourceUrl"
+        :status="profile.deregStatus"
+        :verified-at="formatDate(profile.deregVerifiedAt)"
+        title="Deregistration"
+      >
         <div class="space-y-4">
           <div v-if="profile.deregisterResidence">
             <div class="text-xs text-gray-400 uppercase tracking-wide mb-1">Residence</div>
@@ -74,7 +83,10 @@
       </ProfileSectionCard>
 
       <ProfileSectionCard
+        :collapsible="true"
+        :default-open="false"
         :source-url="profile.financialSourceUrl"
+        :status="profile.financialStatus"
         :verified-at="formatDate(profile.financialVerifiedAt)"
         title="Financial continuity"
       >
@@ -115,7 +127,10 @@
       </ProfileSectionCard>
 
       <ProfileSectionCard
+        :collapsible="true"
+        :default-open="false"
         :source-url="profile.documentsSourceUrl"
+        :status="profile.documentsStatus"
         :verified-at="formatDate(profile.documentsVerifiedAt)"
         title="Documents needed to exit"
       >

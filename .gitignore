@@ -33,3 +33,4 @@ test-results/
 allure-results
 
 /app/generated/prisma
+/bun.lock
